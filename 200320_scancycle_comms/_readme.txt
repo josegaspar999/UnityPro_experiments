@@ -1,4 +1,12 @@
 
+Experiments with UnityPro interacting with Matlab using Modbus
+--------------------------------------------------------------
+
+Setup:
+open "tst.stu" with UnityPro
+open "tst.m" with Matlab and choose a test to run
+
+
 -- Exp1: Matlab sends "coils write" to the PLC simulator exp:
 
 Found no cases where multiple messages could enter the PLC simulator in a single scan cycle
