@@ -8,6 +8,9 @@ function tst_show( tstId )
 % tst_show(-1)
 % tst_show(-2)
 
+% Print all:
+% tst_show(-3)
+
 % April 2020, JG
 
 if nargin<1
@@ -44,6 +47,15 @@ switch tstId
             tst_show_main(DBC);
         end
         
+    case -3
+        % print all *.mat
+        d= dir('*.mat');
+        for i=1:length(d)
+            load( d(i).name, 'DBC' );
+            ofname= strrep( lower(d(i).name), '.mat', '.png' );
+            tst_show_main(DBC, struct('ofname', ofname) );
+        end
+        
 end
 
 
@@ -72,7 +84,11 @@ if strcmpi(s, 'y')
 end
 
 
-function tst_show_main( DBC )
+function tst_show_main( DBC, options )
+if nargin<2
+    options= [];
+end
+
 % plot( DBC(1,:), DBC(2,:)-DBC(1,:), '.-' )
 
 [~,~,~,h1,m1,s1]= datevec( DBC(1,:) ); t1= 3600*h1 +60*m1 +s1;
@@ -89,5 +105,9 @@ plot( t1-t1(1), 1000*[diff(t1) 0], '.-' )
 xlabel('t [sec]')
 ylabel('t_1 diff [msec]')
 title('Time differences between modbus commands')
+
+if isfield(options, 'ofname')
+    print(options.ofname, '-dpng');
+end
 
 return
