@@ -24,33 +24,42 @@ if length(tstId)>1
 end
 
 switch tstId
-    case -100, str2double_tst(1);
+    case -100
+        % specific function debug
+        str2double_tst(1);
+
     case {0, 1, 2, 3, 4, 5, 6, 7}
+        % all modalities of tests, 0..7 represent three 0/1 flags
         x= dec2bin(tstId,3)-'0';
-        tst_run_main( x(1), x(2), x(3) );
+        startAtM0Flag= x(2);
+        autoFlag=      x(1);
+        stressFlag=    x(3);
+        tst_run_main( autoFlag, startAtM0Flag, stressFlag );
 end
 
 
 % -------------------------------------------
 function tst_run_main( autoFlag, startAtM0Flag, stressFlag )
 
-% configuration commands
+% -- configuration commands
 mymodbus2( 'db_level_set', 2 )
 mymodbus2( 'db_level_lock', 1 )
+
 if startAtM0Flag
     % if your UnityPro program does not copy m0..19 to/from m180..m199 :
     myterminal4_aux( 'mymenu2', 'Comms addr base set m0 mw180' );
 end
+
 if ~stressFlag
     myterminal4_aux( 'mymenu2', 'Refresh period 1sec' );
 else
     myterminal4_aux( 'mymenu2', 'Refresh period 0.1sec' );
 end
 
-% launch the terminal (click the "Refresh" button)
+% -- launch the terminal (click the "Refresh" button)
 myterminal4
 
-% do the logging automatically (no clicks)
+% -- do the logging automatically (no clicks)
 if autoFlag
     myterminal4_aux( 'refresh' );
     tst_show(0)
